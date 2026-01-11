@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Sentence Scramble Game Generator</title>
+    <style>
+        /* CSS Giao diện Máy Tạo Game */
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; text-align: center; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; text-transform: uppercase; letter-spacing: 1px; }
+        .tutorial { background: #e8f6f3; padding: 15px; border-radius: 8px; text-align: left; margin-bottom: 20px; border-left: 5px solid #1abc9c; }
+        .control-panel { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; text-align: left; }
+        .bank-list { background: #f8f9fa; padding: 15px; border-radius: 10px; border: 1px solid #ddd; }
+        .bank-item { margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .bank-label { font-weight: bold; color: #34495e; display: block; margin-bottom: 5px; }
+        textarea { width: 100%; height: 300px; padding: 15px; border: 2px solid #bdc3c7; border-radius: 8px; font-family: monospace; font-size: 14px; box-sizing: border-box; }
+        button { cursor: pointer; border: none; border-radius: 5px; padding: 8px 15px; font-weight: bold; transition: 0.2s; }
+        .btn-load { background: #3498db; color: white; }
+        .btn-save { background: #e67e22; color: white; }
+        .btn-export { background: #c0392b; color: white; width: 100%; padding: 15px; font-size: 18px; margin-top: 10px; border-radius: 8px; box-shadow: 0 4px 0 #962d22; }
+        .btn-export:active { transform: translateY(4px); box-shadow: none; }
+        @media (max-width: 700px) { .control-panel { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🛠️ ENGLISH GAME GENERATOR (V2)</h1>
+        
+        <div class="tutorial">
+            <h3>Hướng dẫn (Instructions):</h3>
+            <p>1. Chọn khối lớp hoặc nhập câu hỏi vào ô bên phải.</p>
+            <p>2. Bấm <b>"Lưu" (Save)</b> để nhớ bộ đề.</p>
+            <p>3. Bấm nút màu đỏ <b>"DOWNLOAD GAME FILE"</b>.</p>
+            <p>4. File tải về đã có sẵn tính năng: <b>Đếm câu đúng (✔) và Đếm câu sai (✖)</b>.</p>
+        </div>
+
+        <div class="control-panel">
+            <div class="bank-list">
+                <div class="bank-item">
+                    <span class="bank-label">Grade 1</span>
+                    <button class="btn-load" onclick="loadData('grade1')">Open</button>
+                    <button class="btn-save" onclick="saveData('grade1')">Save</button>
+                </div>
+                <div class="bank-item">
+                    <span class="bank-label">Grade 2</span>
+                    <button class="btn-load" onclick="loadData('grade2')">Open</button>
+                    <button class="btn-save" onclick="saveData('grade2')">Save</button>
+                </div>
+                <div class="bank-item">
+                    <span class="bank-label">Grade 3</span>
+                    <button class="btn-load" onclick="loadData('grade3')">Open</button>
+                    <button class="btn-save" onclick="saveData('grade3')">Save</button>
+                </div>
+                <div class="bank-item">
+                    <span class="bank-label">Grade 4</span>
+                    <button class="btn-load" onclick="loadData('grade4')">Open</button>
+                    <button class="btn-save" onclick="saveData('grade4')">Save</button>
+                </div>
+                <div class="bank-item">
+                    <span class="bank-label">Grade 5</span>
+                    <button class="btn-load" onclick="loadData('grade5')">Open</button>
+                    <button class="btn-save" onclick="saveData('grade5')">Save</button>
+                </div>
+            </div>
+
+            <div>
+                <textarea id="input-sentences" placeholder="Type sentences here...
+Example:
+Can you|open|the|door?
+My name is Linh"></textarea>
+                
+                <button class="btn-export" onclick="exportGameFile()">⬇ DOWNLOAD GAME FILE (.html)</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. QUẢN LÝ DỮ LIỆU ---
+        function saveData(key) {
+            const content = document.getElementById('input-sentences').value;
+            if(!content.trim()) { alert("Content is empty!"); return; }
+            localStorage.setItem('TeacherTool_' + key, content);
+            alert("✅ Saved to " + key);
+        }
+
+        function loadData(key) {
+            const content = localStorage.getItem('TeacherTool_' + key);
+            if(content) {
+                document.getElementById('input-sentences').value = content;
+            } else {
+                alert("⚠️ Slot " + key + " is empty.");
+            }
+        }
+
+        // --- 2. XUẤT FILE GAME ---
+        function exportGameFile() {
+            const content = document.getElementById('input-sentences').value;
+            if(!content.trim()) { alert("Please type questions first!"); return; }
+
+            // Code HTML của file Game học sinh (Đã sửa lại phần hiển thị điểm sai)
+            const studentHtml = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Exercise</title>
+<style>
+body{font-family:'Comic Sans MS',sans-serif;background:#e0f7fa;text-align:center;padding:20px;user-select:none}
+.container{max-width:700px;margin:0 auto;background:white;padding:20px;border-radius:15px;box-shadow:0 5px 15px rgba(0,0,0,0.2)}
+h1{color:#0097e6}
+.drop-zone{min-height:60px;border:3px dashed #0097e6;border-radius:10px;padding:10px;margin:20px 0;display:flex;flex-wrap:wrap;justify-content:center;background:#f5fcff}
+.word-bank{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.word-card{background:#fff;border:2px solid #333;padding:8px 15px;border-radius:8px;cursor:pointer;font-size:18px;box-shadow:3px 3px 0 #333;margin:5px}
+.word-card:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #333}
+button{background:#ff9f43;color:#fff;border:none;padding:10px 25px;font-size:18px;border-radius:25px;cursor:pointer;font-weight:bold;margin-top:10px}
+.stats{display:flex;justify-content:space-around;background:#eee;padding:10px;border-radius:10px;font-weight:bold;font-size:18px}
+#cert{display:none;border:5px solid gold;padding:20px;background:#fffdf0}
+</style>
+</head>
+<body>
+<div class="container" id="game-ui">
+    <h1>ENGLISH GAME</h1>
+    <div class="stats">
+        <span>Q: <span id="q-now">1</span>/<span id="q-total">0</span></span> 
+        <span style="color:green">✔ <span id="s-right">0</span></span>
+        <span style="color:red">✖ <span id="s-wrong">0</span></span>
+    </div>
+    
+    <h3>Arrange the sentence:</h3>
+    <div class="drop-zone" id="ans"></div>
+    <div class="word-bank" id="src"></div>
+    <h3 id="msg" style="height:25px"></h3>
+    
+    <button onclick="check()" id="btn-chk">Check ✅</button>
+    <button onclick="next()" id="btn-nxt" style="display:none;background:#0097e6">Next ➡</button>
+</div>
+
+<div class="container" id="cert">
+    <h1 style="color:#e67e22">EXCELLENT!</h1>
+    <p>You have finished the exercise.</p>
+    <div style="font-size:20px; margin:20px">
+        <p style="color:green">Correct: <span id="final-right">0</span></p>
+        <p style="color:red">Wrong attempts: <span id="final-wrong">0</span></p>
+    </div>
+    <button onclick="location.reload()">Play Again ↺</button>
+</div>
+
+<script>
+// DATA
+const data = \`${content}\`; 
+const sentences = data.split('\\n').filter(s=>s.trim()!=='');
+let idx=0, right=0, wrong=0, currWords=[], ansWords=[];
+
+document.getElementById('q-total').innerText = sentences.length;
+loadQ();
+
+function loadQ(){
+    if(idx>=sentences.length){showCert();return;}
+    document.getElementById('q-now').innerText = idx+1;
+    let raw = sentences[idx].trim();
+    let words = raw.includes('|') ? raw.split('|').map(w=>w.trim()) : raw.split(/\\s+/);
+    ansWords=[]; currWords=[...words].sort(()=>Math.random()-0.5);
+    render();
+    document.getElementById('msg').innerText='';
+    document.getElementById('btn-chk').style.display='inline-block';
+    document.getElementById('btn-nxt').style.display='none';
+}
+
+function render(){
+    const a = document.getElementById('ans'), s = document.getElementById('src');
+    a.innerHTML=''; s.innerHTML='';
+    ansWords.forEach((w,i)=>{let b=btn(w);b.onclick=()=>{ansWords.splice(i,1);currWords.push(w);render()};a.appendChild(b)});
+    currWords.forEach((w,i)=>{let b=btn(w);b.onclick=()=>{currWords.splice(i,1);ansWords.push(w);render()};s.appendChild(b)});
+}
+
+function btn(t){let d=document.createElement('div');d.className='word-card';d.innerText=t;return d;}
+
+function check(){
+    let user = ansWords.join(' ').replace(/\\s+/g,' ').trim();
+    let correct = sentences[idx].trim().replace(/\\|/g,' ').replace(/\\s+/g,' ').trim();
+    
+    if(user===correct){
+        document.getElementById('msg').innerHTML='<span style="color:green">🎉 Correct!</span>';
+        right++; 
+        document.getElementById('s-right').innerText=right;
+        
+        // Hiện nút Next để qua câu
+        document.getElementById('btn-chk').style.display='none';
+        document.getElementById('btn-nxt').style.display='inline-block';
+    }else{
+        document.getElementById('msg').innerHTML='<span style="color:red">Try again!</span>';
+        wrong++;
+        // Cập nhật điểm sai
+        document.getElementById('s-wrong').innerText=wrong;
+        // KHÔNG chuyển câu, học sinh phải làm lại cho đúng.
+    }
+}
+
+function next(){idx++;loadQ();}
+
+function showCert(){
+    document.getElementById('game-ui').style.display='none';
+    document.getElementById('cert').style.display='block';
+    document.getElementById('final-right').innerText = right;
+    document.getElementById('final-wrong').innerText = wrong;
+}
+<\/script>
+</body>
+</html>`;
+
+            const blob = new Blob([studentHtml], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "English_Game_Student.html";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    </script>
+</body>
+</html>
