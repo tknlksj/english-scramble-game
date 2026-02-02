@@ -66,7 +66,10 @@
             </div>
 
             <div>
-                <textarea id="input-sentences" placeholder="Type sentences here...\nExample:\nCan you|open|the|door?\nMy name is Linh"></textarea>
+                <textarea id="input-sentences" placeholder="Type sentences here...
+Example:
+Can you|open|the|door?
+My name is Linh"></textarea>
                 
                 <button class="btn-export" onclick="exportGameFile()">⬇ DOWNLOAD GAME FILE (.html)</button>
             </div>
@@ -147,7 +150,7 @@ button{background:#ff9f43;color:#fff;border:none;padding:10px 25px;font-size:18p
 <script>
 // DATA
 const data = \`${content}\`; 
-const sentences = data.split('\n').filter(s=>s.trim()!=='');
+const sentences = data.split('\\n').filter(s=>s.trim()!=='');
 let idx=0, right=0, wrong=0, currWords=[], ansWords=[];
 
 document.getElementById('q-total').innerText = sentences.length;
@@ -157,7 +160,7 @@ function loadQ(){
     if(idx>=sentences.length){showCert();return;}
     document.getElementById('q-now').innerText = idx+1;
     let raw = sentences[idx].trim();
-    let words = raw.includes('|') ? raw.split('|').map(w=>w.trim()) : raw.split(/\s+/);
+    let words = raw.includes('|') ? raw.split('|').map(w=>w.trim()) : raw.split(/\\s+/);
     ansWords=[]; currWords=[...words].sort(()=>Math.random()-0.5);
     render();
     document.getElementById('msg').innerText='';
@@ -175,8 +178,8 @@ function render(){
 function btn(t){let d=document.createElement('div');d.className='word-card';d.innerText=t;return d;}
 
 function check(){
-    let user = ansWords.join(' ').replace(/\s+/g,' ').trim();
-    let correct = sentences[idx].trim().replace(/\|/g,' ').replace(/\s+/g,' ').trim();
+    let user = ansWords.join(' ').replace(/\\s+/g,' ').trim();
+    let correct = sentences[idx].trim().replace(/\\|/g,' ').replace(/\\s+/g,' ').trim();
     
     if(user===correct){
         document.getElementById('msg').innerHTML='<span style="color:green">🎉 Correct!</span>';
@@ -205,16 +208,17 @@ function showCert(){
 }
 <\/script>
 </body>
-</html>
-`;
+</html>`;
 
-            const blob = new Blob([studentHtml], {type: 'text/html'});
+            const blob = new Blob([studentHtml], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url; a.download = 'English_Game_Student.html';
+            a.href = url;
+            a.download = "English_Game_Student.html";
+            document.body.appendChild(a);
             a.click();
-            URL.revokeObjectURL(url);
+            document.body.removeChild(a);
         }
-    <\/script>
+    </script>
 </body>
 </html>
